@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toko Komponen Komputer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #0077cc;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .product {
+      background: white;
+      width: 250px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin: 15px;
+      overflow: hidden;
+      transition: 0.3s;
+    }
+
+    .product:hover {
+      transform: scale(1.05);
+    }
+
+    .product img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .info {
+      padding: 15px;
+    }
+
+    .info h3 {
+      font-size: 17px;
+      margin: 5px 0;
+    }
+
+    .price {
+      color: #0077cc;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .rating {
+      color: #f5b301;
+    }
+
+    .sold {
+      color: gray;
+      font-size: 13px;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    button {
+      flex: 1;
+      margin: 3px;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .add-cart {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .buy-now {
+      background-color: #ff9900;
+      color: white;
+    }
+
+    .add-cart:hover {
+      background-color: #218838;
+    }
+
+    .buy-now:hover {
+      background-color: #e68a00;
+    }
+
+    footer {
+      background: #0077cc;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+    }
+
+    /* Keranjang */
+    #cart {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: 20px auto;
+    }
+
+    #cart h2 {
+      text-align: center;
+      color: #0077cc;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      padding: 8px 0;
+    }
+
+    .total {
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    #checkout-btn {
+      display: block;
+      width: 100%;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    #checkout-btn:hover {
+      background-color: #005fa3;
+    }
+
+    @media (max-width: 600px) {
+      .product {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🖥️ Wong Sangar Shop</h1>
+    <p>Temukan berbagai komponen dan aksesoris PC berkualitas tinggi!</p>
+  </header>
+
+  <div class="container" id="product-container"></div>
+
+  <!-- Keranjang Belanja -->
+  <div id="cart">
+    <h2>🛒 Keranjang Belanja</h2>
+    <div id="cart-items"></div>
+    <p class="total">Total: Rp <span id="total-price">0</span></p>
+    <button id="checkout-btn">💳 Beli Sekarang</button>
+  </div>
+
+  <footer>
+    <p>© 2025 Toko Komponen Komputer</p>
+  </footer>
+
+  <script>
+    const products = [
+      { name: "Processor Intel Core i9-14900KS", price: 7750000, rating: 4.8, sold: 1200, image: "https://tse1.mm.bing.net/th/id/OIP.tAbF5lNb78w1gt6-kvfBEgHaE8?pid=Api&P=0&h=220" },
+      { name: "Motherboard ASUS Prime B660M-A", price: 1850000, rating: 4.6, sold: 980, image: "https://www.limifield.pt/wp-content/uploads/2023/03/Motherboard-Asus-Prime-B660M-A-mATX-Wifi-DDR4-Socket-1700-1.jpg" },
+      { name: "RAM Corsair Vengeance 16GB DDR4", price: 850000, rating: 4.9, sold: 3200, image: "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6256/6256216_sd.jpg" },
+      { name: "SSD Samsung 980 NVMe 500GB", price: 920000, rating: 4.9, sold: 2400, image: "https://tse1.mm.bing.net/th/id/OIP.P3bTucq3utlAD2CHY8dwiwHaHa?pid=Api&P=0&h=220" },
+      { name: "GPU NVIDIA RTX 5090 ", price: 20000000 , rating: 4.7, sold: 870, image: "https://cdn.wccftech.com/wp-content/uploads/2024/07/NVIDIA-GeForce-RTX-5090D-Blackwell-Gaming-GPU-For-China-Custom-1.jpg" },
+      { name: "Power Supply Corsair 650W Bronze", price: 750000, rating: 4.8, sold: 1900, image: "https://down-id.img.susercontent.com/file/id-11134207-7r990-ly7tjty642cob9" },
+      { name: "Casing PC NZXT H510", price: 1200000, rating: 4.7, sold: 1500, image: "https://down-th.img.susercontent.com/file/sg-11134201-7rd6z-luk5zbnd0x1qd8" },
+      { name: "Harddisk Seagate Barracuda 1TB", price: 550000, rating: 4.8, sold: 3400, image: "https://tse3.mm.bing.net/th/id/OIP.Ypnzk3IsYGGBTa7bftD07gHaHW?pid=Api&P=0&h=220" },
+      { name: "Mouse Logitech G102 Lightsync", price: 230000, rating: 4.9, sold: 6200, image: "https://tse1.mm.bing.net/th/id/OIP.ppvUUl3Kl6SIlJW-4Q4b0QHaHa?pid=Api&P=0&h=220" },
+      { name: "Monitor Xiaomi Curved Gaming ", price: 3800000, rating: 4.9, sold: 3000, image: "https://tse2.mm.bing.net/th/id/OIP.DBrRWq3-a7S17lkgiiZfiAHaIH?pid=Api&P=0&h=220" },
+      
+    ];
+    
+
+    const container = document.getElementById("product-container");
+    const cartItemsDiv = document.getElementById("cart-items");
+    const totalPriceSpan = document.getElementById("total-price");
+
+    let cart = [];
+
+    // Render produk
+    products.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product";
+      card.innerHTML = `
+        <img src="${p.image}" alt="${p.name}">
+        <div class="info">
+          <h3>${p.name}</h3>
+          <p class="price">Rp ${p.price.toLocaleString()}</p>
+          <p class="rating">⭐ ${p.rating} / 5</p>
+          <p class="sold">Terjual ${p.sold}+</p>
+          <div class="btn-group">
+            <button class="add-cart">Tambah</button>
+            <button class="buy-now">Beli</button>
+          </div>
+        </div>
+      `;
+
+      const addBtn = card.querySelector(".add-cart");
+      const buyBtn = card.querySelector(".buy-now");
+
+      addBtn.addEventListener("click", () => addToCart(p));
+      buyBtn.addEventListener("click", () => buyNow(p));
+
+      container.appendChild(card);
+    });
+
+    function addToCart(product) {
+      cart.push(product);
+      renderCart();
+    }
+
+    function renderCart() {
+      cartItemsDiv.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        total += item.price;
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <span>${item.name}</span>
+          <span>Rp ${item.price.toLocaleString()}</span>
+          <button style="background:red;color:white;border:none;border-radius:3px;cursor:pointer;" onclick="removeItem(${index})">x</button>
+        `;
+        cartItemsDiv.appendChild(div);
+      });
+
+      totalPriceSpan.textContent = total.toLocaleString();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    function buyNow(product) {
+      alert(`Kamu membeli ${product.name} seharga Rp ${product.price.toLocaleString()}`);
+    }
+
+    document.getElementById("checkout-btn").addEventListener("click", () => {
+      if (cart.length === 0) {
+        alert("Keranjang kosong!");
+        return;
+      }
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      alert(`Terima kasih sudah berbelanja! Total pembelian: Rp ${total.toLocaleString()}`);
+      cart = [];
+      renderCart();
+    });
+  </script>
+</body>
+</html>
